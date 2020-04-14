@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f22e23b9-f530-415a-b193-b69591013d54" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/dialpy/pyOptimalEstimation_examples" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/pyOptimalEstimation_examples" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dialpy/pyOptimalEstimation_examples/Supplement A - MWR retrieval.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/pyOptimalEstimation_examples/Supplement A - MWR retrieval.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dialpy/pyOptimalEstimation_examples/environment_linux.yml" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/pyOptimalEstimation_examples/environment_linux.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/dialpy/pyOptimalEstimation" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dialpy.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dialpy.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/script_test_oem.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/script_test_oem.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,7 +29,7 @@
   <component name="ProjectId" id="1aWtXWQakyU3aeeHN5sUOPcik8u" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -70,5 +73,11 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/dialpy/Kalman-and-Bayesian-Filters-in-Python" />
+      <path value="$PROJECT_DIR$/dialpy/pyOptimalEstimation_examples" />
+    </ignored-roots>
   </component>
 </project>
