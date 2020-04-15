@@ -16,7 +16,21 @@ _POWER_OUT_LAMBDA_ON = 1
 _POWER_OUT_LAMBDA_OFF = 1
 
 
-def xco2(range_, delta_sigma_abs, beta_att_lambda_on, beta_att_lambda_off, power_background):
+def xco2_power(range_, delta_sigma_abs, power_in_lambda_on, power_in_lambda_off, power_background):
+
+    n_c = np.empty([len(range_), 1])
+    n_c[:] = 0
+
+    for i in range(len(range_)):
+
+        n_c[i] = 1 / (2 * delta_sigma_abs * _DELTA_RANGE) * \
+            np.log((power_in_lambda_off[i+1] - power_background) / (power_in_lambda_on[i+1] - power_background) *
+                   (power_in_lambda_on[i] - power_background) / (power_in_lambda_off[i] - power_background))
+
+    return n_c
+
+
+def xco2_beta(range_, delta_sigma_abs, beta_att_lambda_on, beta_att_lambda_off, power_background):
 
     n_c = np.empty([len(range_), 1])
     n_c[:] = 0
