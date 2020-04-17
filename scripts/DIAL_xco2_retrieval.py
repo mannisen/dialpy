@@ -6,42 +6,41 @@
 
 import numpy as np
 from dialpy.pyOptimalEstimation import pyOptimalEstimation as pyOE
-from dialpy.equations.differential_co2_concentration import xco2_power
+from dialpy.equations.differential_co2_concentration import xco2_beta
+from scipy.optimize import curve_fit
 
 # Name of data fields
-priori_names = ["co2_ppm"]
-obs_names = ["range_", "delta_sigma_abs", "power_on", "power_off", "power_bkg"]
+x_vars = ["delta_sigma_abs", "beta_att_lambda_on", "beta_att_lambda_off"]
+y_vars = ["co2_ppm"]
 
-# Prepare priori and its uncertainty
-co2_ppm_model = -np.linspace(0, 1, 320)**2 * np.linspace(0, 1, 320) + np.repeat(400, 320)
-co2_ppm_model_sigma = np.repeat(3, 320) + 1 * np.random.rand(320)
-
-# Prepare observed variables
-range_ = np.arange(0, 9600, 30)
-power_off = -np.linspace(0, 1, 320)**2 * np.linspace(0, 1, 320) + 9.9
-power_on_hi = -np.linspace(0, 1, 320)**2 * np.linspace(0, 1, 320) + 9.8
-power_on = np.hstack((power_off[:100], power_on_hi[100:]))
-power_bkg = np.linspace(0, 1, 320) + (np.random.rand(320)+8)
-delta_sigma_abs = 1
+# variables
+range_ = np.array(np.linspace(0, 10, num=400))
+coeff = np.array(np.random.uniform(.999, 1.001, (400, )))
+delta_sigma_abs = coeff * 1
+c = -np.linspace(0, 1, num=400)**2 * np.linspace(0, 1, num=400) + 1
+c_abs = np.hstack((c[:80], c[80:]-.1))
+obs_beta_att_lambda_on = np.random.uniform(.8e-7, 1.2e-7, (400, )) * c_abs
+obs_beta_att_lambda_off = np.random.uniform(.8e-7, 1.2e-7, (400, )) * c
 
 # Arrange forward model inputs to dictionary
 xco2_args = {"range_": range_,
              "delta_sigma_abs": delta_sigma_abs,
-             "power_on": power_on,
-             "power_off": power_off,
-             "power_bkg": power_bkg}
+             "beta_att_lambda_on": beta_att_lambda_on,
+             "beta_att_lambda_off": beta_att_lambda_off}
 
-# List observations
-obs = [range_, delta_sigma_abs, power_on, power_off, power_bkg]
+
+# # Prepare priori and its uncertainty
+co2_ppm = xco2_beta(delta_sigma_abs, beta_att_lambda_on, beta_att_lambda_off, power_bkg)
+co2_ppm_sigma = np.var(co2_ppm)
 
 # Covariance matrix of observations
-obs_sigma = np.cov([range_, delta_sigma_abs, power_on, power_off, power_bkg])
+obs_sigma = np.cov(obs)
 
 # Create optimal estimation object
 oe = pyOE.optimalEstimation(
     priori_names,  # state variable names
-    co2_ppm_model,  # a priori
-    co2_ppm_model_sigma,  # a priori uncertainty
+    co2_ppm,  # a priori
+    co2_ppm_sigma,  # a priori uncertainty
     obs_names,  # measurement variable names
     obs,  # observations
     obs_sigma,  # observation uncertainty
