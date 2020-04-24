@@ -35,20 +35,28 @@ for i in range(len(range_)):
     else:
         c[i] = b_n[i] - np.random.uniform(.1, .2)
 obs_beta_off = gu.renormalize(c, [c.min(), c.max()], [0, .7])
-aaa = np.array([0, .075 ,.5, .925, 1])
+aaa = np.array([0, .075, .5, .925, 1])
 obs_beta_on = np.hstack((obs_beta_off[:80], obs_beta_off[80:85]-aaa*.05, obs_beta_off[85:]-.05))
+
+# estimate delta_sigma
+beta_off = gu.renormalize(b_n, [b_n.min(), b_n.max()], [0, .7])
+beta_on = np.hstack((beta_off[:80], beta_off[80:85]-aaa*.05, beta_off[85:]-.05))
+beta_on[beta_on < 0] = 1e-12
+beta_off[beta_off < 0] = 1e-12
+power_bkg = np.repeat(1, np.shape(beta_on))
+delta_sigma_abs = np.empty((np.shape(obs_beta_off)))
+for i in range(len(range_)):
+    delta_sigma_abs[i] = acs.differential_absorption_cross_section(T_[i], P_[i])
+
+co2_ppm = xco2_beta(delta_sigma_abs, beta_on/1e6, beta_off/1e6, power_bkg)
+co2_ppm_sigma = np.var(co2_ppm)
 
 # Arrange forward model inputs to dictionary
 xco2_args = {"range_": range_,
              "delta_sigma_abs": delta_sigma_abs,
-             "obs_beta_att_lambda_on": obs_beta_att_lambda_on,
-             "obs_beta_att_lambda_off": obs_beta_att_lambda_off}
+             "obs_beta_att_lambda_on": obs_beta_on,
+             "obs_beta_att_lambda_off": obs_beta_off}
 
-delta_sigma_abs = acs.
-
-# # Prepare priori and its uncertainty
-co2_ppm = xco2_beta(delta_sigma_abs, beta_att_lambda_on, beta_att_lambda_off, power_bkg)
-co2_ppm_sigma = np.var(co2_ppm)
 
 # Covariance matrix of observations
 obs_sigma = np.cov(obs)

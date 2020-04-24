@@ -161,7 +161,6 @@ def differential_absorption_cross_section(T_, P_):
     P_0 = _STANDARD_PRESSURE
     m_ = _MOLECULAR_MASS_CO2
 
-    print("Calculating absorption cross section")
     S_ON = line_intensity(S_0_ON, T_0, T_, h_, c_, nu_0, k_, E_ON)
     S_OFF = line_intensity(S_0_OFF, T_0, T_, h_, c_, nu_0, k_, E_OFF)
     gamma_L_ON = pressure_broadened_linewidth(gamma_0_ON, P_, P_0, T_0, T_, a_ON)
