@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 
 # Known constants
 _DELTA_RANGE = 100
-_POWER_OUT_LAMBDA_ON = 1
-_POWER_OUT_LAMBDA_OFF = 1
+_POWER_OUT_LAMBDA_ON = 1e-15
+_POWER_OUT_LAMBDA_OFF = 1e-15
 
 
 def xco2_power(range_, delta_sigma_abs, P_on, P_off, P_bkg):
@@ -30,45 +30,47 @@ def xco2_power(range_, delta_sigma_abs, P_on, P_off, P_bkg):
     return n_c
 
 
-def xco2_beta(delta_sigma_abs, beta_att_lambda_on, beta_att_lambda_off, P_bkg):
+def xco2_beta(delta_sigma_abs, beta_att_on, beta_att_off):
     """
+    # last input should be P_bkg if included ..
 
     Args:
         delta_sigma_abs:
-        beta_att_lambda_on:
-        beta_att_lambda_off:
+        beta_att_on:
+        beta_att_off:
         P_bkg:
 
     Returns:
 
     """
 
-    n_c = np.empty([len(beta_att_lambda_on), ])
+    n_c = np.empty([len(beta_att_on), ])
     n_c[:] = 0
 
     # Calculate power from power of outgoing laser pulse, attenuated beta, power of background signal, range resolution
-    P_on = _POWER_OUT_LAMBDA_ON * _DELTA_RANGE * beta_att_lambda_on  # + P_bkg
-    P_off = _POWER_OUT_LAMBDA_OFF * _DELTA_RANGE * beta_att_lambda_off  # + P_bkg
+    P_on = _POWER_OUT_LAMBDA_ON * _DELTA_RANGE * beta_att_on  # + P_bkg
+    P_off = _POWER_OUT_LAMBDA_OFF * _DELTA_RANGE * beta_att_off  # + P_bkg
+    print('beta_att_on: mean {}, min {}, max {}'. format(np.mean(beta_att_on), beta_att_on.min(), beta_att_on.max()))
+    print('beta_att_off: mean {}, min {}, max {}'. format(np.mean(beta_att_off), beta_att_off.min(), beta_att_off.max()))
     print('P_on: mean {}, min {}, max {}'. format(np.mean(P_on), P_on.min(), P_on.max()))
     print('P_off: mean {}, min {}, max {}'. format(np.mean(P_off), P_off.min(), P_off.max()))
-    plt.plot(P_on, np.linspace(0, 10, num=len(P_on)))
-    plt.plot(P_off, np.linspace(0, 10, num=len(P_on)))
 
-    P_on_above = P_on[1:]
-    P_off_above = P_off[1:]
-    P_bkg_above = P_bkg[1:]
-    P_on_below = P_on[0:-1]
-    P_off_below = P_off[0:-1]
-    P_bkg_below = P_bkg[0:-1]
-    delta_sigma_abs = delta_sigma_abs[0:-1]
+    P_on_above = P_on[1:-100]
+    P_off_above = P_off[1:-100]
+    # P_bkg_above = P_bkg[1:]
+    P_on_below = P_on[0:-101]
+    P_off_below = P_off[0:-101]
+    # P_bkg_below = P_bkg[0:-1]
+    delta_sigma_abs = delta_sigma_abs[0:-101]
     print('dsabs: mean {}, min {}, max {}'. format(np.mean(delta_sigma_abs), delta_sigma_abs.min(), delta_sigma_abs.max()))
 
     # n_c = np.multiply(1 / (2 * delta_sigma_abs * _DELTA_RANGE),
     #                   np.log(np.multiply(np.divide((P_off_above - P_bkg_above), (P_on_above - P_bkg_above)),
     #                                      np.divide((P_on_below - P_bkg_below), (P_off_below - P_bkg_below)))))
+
     n_c = np.multiply(1 / (2 * delta_sigma_abs * _DELTA_RANGE),
-                      np.log(np.divide(np.multiply((P_on_below), (P_off_above)),
-                                       np.multiply((P_on_above), (P_off_below)))))
+                      np.log(np.divide(np.multiply(P_on_below, P_off_above),
+                                       np.multiply(P_on_above, P_off_below))))
 
     return n_c
 
