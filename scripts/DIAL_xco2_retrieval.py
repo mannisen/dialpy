@@ -7,6 +7,8 @@
 import numpy as np
 from dialpy.pyOptimalEstimation import pyOptimalEstimation as pyOE
 from dialpy.equations.differential_co2_concentration import xco2_beta
+from dialpy.equations import absroption_corss_section as acs
+from dialpy.utilities import general_utils as gu
 from scipy.optimize import curve_fit
 
 # Name of data fields
@@ -14,20 +16,35 @@ x_vars = ["delta_sigma_abs", "beta_att_lambda_on", "beta_att_lambda_off"]
 y_vars = ["co2_ppm"]
 
 # variables
+# range
 range_ = np.array(np.linspace(0, 10, num=400))
-coeff = np.array(np.random.uniform(.999, 1.001, (400, )))
-delta_sigma_abs = coeff * 1
-c = -np.linspace(0, 1, num=400)**2 * np.linspace(0, 1, num=400) + 1
-c_abs = np.hstack((c[:80], c[80:]-.1))
-obs_beta_att_lambda_on = np.random.uniform(.8e-7, 1.2e-7, (400, )) * c_abs
-obs_beta_att_lambda_off = np.random.uniform(.8e-7, 1.2e-7, (400, )) * c
+
+# model temperature
+T_ = -range_ * 5 + 5 + 273.15  # (K)
+# model pressure
+P_ = (-range_ * .08 + 1) * 101325  # Pa
+
+# generate simulated att beta profiles
+b = -range_**2 + -range_ + 0
+b_n = gu.renormalize(b, [b.min(), b.max()], [0, 1])
+c = np.empty(400, )
+for i in range(len(range_)):
+    dice = np.random.rand()
+    if dice > .5:
+        c[i] = b_n[i] + np.random.uniform(.1, .2)
+    else:
+        c[i] = b_n[i] - np.random.uniform(.1, .2)
+obs_beta_off = gu.renormalize(c, [c.min(), c.max()], [0, .7])
+aaa = np.array([0, .075 ,.5, .925, 1])
+obs_beta_on = np.hstack((obs_beta_off[:80], obs_beta_off[80:85]-aaa*.05, obs_beta_off[85:]-.05))
 
 # Arrange forward model inputs to dictionary
 xco2_args = {"range_": range_,
              "delta_sigma_abs": delta_sigma_abs,
-             "beta_att_lambda_on": beta_att_lambda_on,
-             "beta_att_lambda_off": beta_att_lambda_off}
+             "obs_beta_att_lambda_on": obs_beta_att_lambda_on,
+             "obs_beta_att_lambda_off": obs_beta_att_lambda_off}
 
+delta_sigma_abs = acs.
 
 # # Prepare priori and its uncertainty
 co2_ppm = xco2_beta(delta_sigma_abs, beta_att_lambda_on, beta_att_lambda_off, power_bkg)

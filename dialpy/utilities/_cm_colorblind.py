@@ -2,6 +2,7 @@
 pyart.graph._cm_colorblind
 Data for colorblind friendly radar colormaps
 """
+
 import numpy as np
 import os
 

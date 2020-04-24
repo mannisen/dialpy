@@ -13,23 +13,7 @@ import numpy as np
 _ROO_ZERO = 1
 _PLANCK_CONSTANT = 1
 _BOLTZMANN_CONSTANT = 1
-_SPEED_OF_LIGHT = 1
 _RECEIVER_BANDWIDTH = 1
-
-
-def optical_frequency(lambda_):
-    """Convert laser wavelength to optical frequency
-
-    Args:
-        lambda_ : float
-            Wavelength of the laser (m)
-
-    Returns:
-        nu_ : float
-            Optical frequency
-
-    """
-    return _SPEED_OF_LIGHT / lambda_
 
 
 def effective_receiver_area(range_, D_eff, f_eff, lambda_):
@@ -38,18 +22,13 @@ def effective_receiver_area(range_, D_eff, f_eff, lambda_):
     https://doi.org/10.5194/amt-2019-491
 
     Args:
-        range_ : np.ndarray
-            Range from the instrument (m)
-        D_eff : float
-            Effective laser beam diameter (m) estimated by using Pentikainen et al. (2020) method
-        f_eff : float
-            Effective focal length (m) estimated with using Pentikainen et al. (2020) method
-        lambda_ : float
-            Wavelength of the laser (m)
+        range_ (np.ndarray): Range from the instrument (m)
+        D_eff (float):  Effective laser beam diameter (m) estimated by using Pentikainen et al. (2020) method
+        f_eff (float): Effective focal length (m) estimated with using Pentikainen et al. (2020) method
+        lambda_ (float): Wavelength of the laser (m)
 
     Returns:
-        A_e : np.ndarray
-            Effective receiver area as a function of range (m)
+        A_e (np.ndarray): Effective receiver area as a function of range (m)
 
     """
 
@@ -65,14 +44,11 @@ def focus_function(range_, A_e):
     Pentikainen et al. (2020) Eq. (3), https://doi.org/10.5194/amt-2019-491
 
     Args:
-        range_ : numpy.ndarray
-            Range from the instruments (m)
-        A_e : np.ndarray
-            Effective receiver area (m)
+        range_ (numpy.ndarray): Range from the instruments (m)
+        A_e (np.ndarray): Effective receiver area (m)
 
     Returns:
-        T_f : np.ndarray
-            Telescope focus function (unitless)
+        T_f (np.ndarray): Telescope focus function (unitless)
 
     """
 
@@ -86,14 +62,10 @@ def attenuated_backscatter_coefficient(snr_, T_f, lambda_, eta_, E_):
     Pentikainen et al. (2020) Eq. (4), https://doi.org/10.5194/amt-2019-491
 
     Args:
-        snr_ : np.ndarray
-            Background corrected signal-to-noise ratio (dB)
-        T_f : np.ndarray
-            Telescope focus function (unitless)
-        lambda_ : float
-            Wavelength of the laser (m)
-        eta_ : float
-            Heterodyne efficiency (unitless)
+        snr_ (np.ndarray): Background corrected signal-to-noise ratio (dB)
+        T_f (np.ndarray): Telescope focus function (unitless)
+        lambda_ (float): Wavelength of the laser (m)
+        eta_ (float): Heterodyne efficiency (unitless)
 
     Returns:
         beta_att : np.ndarray

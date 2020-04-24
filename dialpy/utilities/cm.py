@@ -23,8 +23,7 @@ from __future__ import print_function, division
 import matplotlib as mpl
 import matplotlib.cm
 import matplotlib.colors as colors
-import numpy as np
-from dopplerlidarpy.utilities._cm import datad
+from dialpy.utilities._cm import datad
 
 cmap_d = dict()
 

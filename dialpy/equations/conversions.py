@@ -10,6 +10,34 @@ from codecs import decode
 import numpy as np
 import struct
 
+_SPEED_OF_LIGHT = 1
+
+
+def optical_wavenumber(lambda_):
+    """
+
+    Args:
+        lambda_ (float): Wavelength of the laser (m)
+
+    Returns:
+        nu (float): Optical frequency
+
+    """
+    return 1 / lambda_
+
+
+def optical_frequency(lambda_):
+    """Convert laser wavelength to optical frequency
+
+    Args:
+        lambda_ (float): Wavelength of the laser (m)
+
+    Returns:
+        f (float): Optical frequency
+
+    """
+    return _SPEED_OF_LIGHT / lambda_
+
 
 def wswd2vr(ws, wd, azi):
     """

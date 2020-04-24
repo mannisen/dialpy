@@ -5,13 +5,13 @@
 Created on 2019-07-18
 Antti Manninen
 Finnish Meteorological Institute
-dopplerlidarpy(at)fmi.fi
+dialpy(at)fmi.fi
 """
 import argparse
 from operator import xor
-from dopplerlidarpy.utilities.general_utils import list2str
-from dopplerlidarpy.utilities.time_utils import validate_date
-from dopplerlidarpy.utilities.input_checks import get_dl_input_list
+from dialpy.utilities.general_utils import list2str
+from dialpy.utilities.time_utils import validate_date
+from dialpy.utilities.input_checks import get_dl_input_list
 
 
 class ArgsBlueprint(object):

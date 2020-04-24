@@ -14,8 +14,8 @@ import matplotlib as mpl
 import matplotlib.colors as colors
 import numpy as np
 
-from dopplerlidarpy.utilities.cm import _reverse_cmap_spec
-from dopplerlidarpy.utilities._cm_colorblind import datad
+from dialpy.utilities.cm import _reverse_cmap_spec
+from dialpy.utilities._cm_colorblind import datad
 
 
 def _generate_cmap(name, lutsize):
