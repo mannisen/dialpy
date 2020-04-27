@@ -12,24 +12,14 @@ import numpy as np
 import pandas as pd
 from scipy.integrate import quad
 from dialpy.utilities import general_utils as gu
+from dialpy.equations import constants
 
 temperature = 293  # (K) = 20 celsius
-_STANDARD_PRESSURE = 101325  # (Pa)
-_REFERENCE_ABS_TEMPERATURE = 296.15  # (K)
-_LINE_INTENSITY_AT_T_0 = 2.179e-23  # (cm mol-1)
-_PATH_TO_HITRAN = 'HITRAN_CO2_transition_data.par'
-_LAMBDA_ON = 1.57141e-6  # (m)
-_LAMBDA_OFF = 1.57125e-6  # (m)
-_CENTRAL_WAVELENGTH = 6360
-_MOLECULAR_MASS_CO2 = 43.989830  # (g)
-_BOLTZMANNS_CONSTANT = 1.3806488e-16  # (erg K-1)
-_PLACKS_CONSTANT = 6.62606957e-27  # erg s
-_SPEED_OF_LIGHT = 2.99792458e8  # (m s-1)
 
 
 def read_hitran_data(nu_):
 
-    data = pd.read_csv(_PATH_TO_HITRAN, delimiter='\t', header=None)
+    data = pd.read_csv(constants.PATH_TO_HITRAN, delimiter='\t', header=None)
 
     # Columns:  Isotopologue nu S A gamma_air gamma_self E" n_air delta_air J' J"
     idx, _ = gu.find_nearest(np.array(data.values[:, 1]), nu_)
@@ -149,17 +139,17 @@ def abs_cross_section(S_, gamma_L, gamma_D, nu, nu_0):
 
 def differential_absorption_cross_section(T_, P_):
 
-    nu_ON = 1 / _LAMBDA_ON
-    nu_OFF = 1 / _LAMBDA_OFF
+    nu_ON = 1 / constants.LAMBDA_ON
+    nu_OFF = 1 / constants.LAMBDA_OFF
     S_0_ON, gamma_0_ON, E_ON, a_ON = read_hitran_data(nu_ON)
     S_0_OFF, gamma_0_OFF, E_OFF, a_OFF = read_hitran_data(nu_OFF)
-    T_0 = _REFERENCE_ABS_TEMPERATURE
-    h_ = _PLACKS_CONSTANT
-    k_ = _BOLTZMANNS_CONSTANT
-    c_ = _SPEED_OF_LIGHT
-    nu_0 = _CENTRAL_WAVELENGTH
-    P_0 = _STANDARD_PRESSURE
-    m_ = _MOLECULAR_MASS_CO2
+    T_0 = constants.REFERENCE_ABS_TEMPERATURE
+    h_ = constants.PLACKS_CONSTANT
+    k_ = constants.BOLTZMANNS_CONSTANT
+    c_ = constants.SPEED_OF_LIGHT
+    nu_0 = constants.CENTRAL_WAVELENGTH
+    P_0 = constants.STANDARD_PRESSURE
+    m_ = constants.MOLECULAR_MASS_CO2
 
     S_ON = line_intensity(S_0_ON, T_0, T_, h_, c_, nu_0, k_, E_ON)
     S_OFF = line_intensity(S_0_OFF, T_0, T_, h_, c_, nu_0, k_, E_OFF)

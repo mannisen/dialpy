@@ -10,47 +10,45 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 import numpy as np
-import matplotlib.pyplot as plt
 from dialpy.pyOptimalEstimation import pyOptimalEstimation as pyOE
 from dialpy.equations.differential_co2_concentration import xco2_beta
+from dialpy.equations import constants
+
+
 # Define the forward operator, accepts state vector X [N0,lam] as input, and
 # returns measurement vector Y [Ze]
 resultsOE = {}
 failed = {}
 
+
 def forward(X):
-    # D = np.logspace(-4, -2, 50)
-    #if len(X) == 2:
-    #    N0log, lam = X
-    #    mu = 1
-    #else:
-    #    N0log, lam, mu = X
+    """
 
-    n_c, coeffs = X  # X is pd.Series type
-    Ratio_P = n_c * coeffs
+    Args:
+        X:
 
-    #N0 = 10**N0log
-    #dD = np.gradient(D)
-    #N = N0 * np.exp(-lam * D**mu)
-    #Z = 1e18 * np.sum(N*D**6*dD)
-    return Ratio_P  # [10*np.log10(Z)]
+    Returns:
 
+    """
+    n_c, delta_sigma_abs = X  # X is pd.Series type
+    Ratio_P = np.exp(((1 / (2 * constants.DELTA_RANGE * delta_sigma_abs)) / n_c)**1)
+
+    return Ratio_P
 
 # define names for X and Y
 x_vars = ["n_c", "coeffs"]
 y_vars = ["Ratio_P"]
 
-# prior knowledge. Note that the provided numbers do not have any scientific
-# meaning.
-
 # first guess for X
-coeff = 2*100*0.5  # 2 * DeltaR * delta_sigma_Abs
-print('coeff {}'.format(coeff))
-x_ap = [400, coeff]
-# covariance matrix for X
-x_cov = np.array([[.0001, 0], [0, 2]])
-# covariance matrix for Y
-y_cov = np.array([[.001]])
+co2_ppm = 400  # (ppm)
+delta_sigma_abs = 0.05  # very close to the ground
+x_ap = [co2_ppm, delta_sigma_abs]
+
+# covariance matrix for X, uncertainties
+x_cov = np.array([[5, 0], [0, .01]])
+
+# covariance matrix for Y, uncertainty
+y_cov = np.array([[.1]])
 
 # measured observation of Y
 y_obs = np.array(xco2_beta(np.array([.5, .46]), np.array([1e-4, 1e-5]), np.array([1e-4, 1e-4])))
