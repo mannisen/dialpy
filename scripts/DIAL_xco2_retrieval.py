@@ -12,14 +12,14 @@ from __future__ import unicode_literals
 import numpy as np
 import matplotlib.pyplot as plt
 from dialpy.pyOptimalEstimation import pyOptimalEstimation as pyOE
-
+from dialpy.equations.differential_co2_concentration import xco2_beta
 # Define the forward operator, accepts state vector X [N0,lam] as input, and
 # returns measurement vector Y [Ze]
 resultsOE = {}
 failed = {}
 
 def forward(X):
-    D = np.logspace(-4, -2, 50)
+    # D = np.logspace(-4, -2, 50)
     #if len(X) == 2:
     #    N0log, lam = X
     #    mu = 1
@@ -44,14 +44,18 @@ y_vars = ["Ratio_P"]
 # meaning.
 
 # first guess for X
-x_ap = [400, .5]
+coeff = 2*100*0.5  # 2 * DeltaR * delta_sigma_Abs
+print('coeff {}'.format(coeff))
+x_ap = [400, coeff]
 # covariance matrix for X
-x_cov = np.array([[1, 0], [0, .01]])
+x_cov = np.array([[.0001, 0], [0, 2]])
 # covariance matrix for Y
-y_cov = np.array([[1e-8]])
+y_cov = np.array([[.001]])
 
 # measured observation of Y
-y_obs = np.array([.007])
+y_obs = np.array(xco2_beta(np.array([.5, .46]), np.array([1e-4, 1e-5]), np.array([1e-4, 1e-4])))
+print('y_obs {}'.format(y_obs))
+#y_obs = np.array([20])
 
 # additional data to forward function
 #forwardKwArgs = {"D": np.logspace(-4, -2, 50)}
@@ -63,28 +67,29 @@ oe = pyOE.optimalEstimation(
 #)
 
 # run the retrieval
-converged = oe.doRetrieval(maxIter=10, maxTime=10000000.0)
+converged = oe.doRetrieval(maxIter=100, maxTime=10000000.0)
 
 if converged:
     # Test whethe rthe retrieval is moderately lienar around x_truth
-    print(oe.linearityTest())
+    #print(oe.linearityTest())
 
     # Show hdegrees of freedom per variable
-    print(oe.dgf_x)
+   # print(oe.dgf_x)
 
     # Apply chi2 tests for retrieval quality
-    print(oe.chiSquareTest())
+  #  print(oe.chiSquareTest())
     # Show RMS normalized with prior
-    print('RMS',
-          np.sqrt(np.mean(((oe.x_truth - oe.x_op) / oe.x_a) ** 2)))
-    print('truth', oe.x_truth)
+ #   print('RMS',
+ #         np.sqrt(np.mean(((oe.x_truth - oe.x_op) / oe.x_a) ** 2)))
+#    print('truth', oe.x_truth)
 
 
     # Store results in xarray DataArray
     summary = oe.summarize(returnXarray=True)
 
-print(summary)
-
+#print(summary)
+print(summary.x_op)
+print(summary.y_op)
 # plot the result
 #oe.plotIterations()
 #oe.summarize()

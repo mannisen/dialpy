@@ -30,7 +30,7 @@ def xco2_power(range_, delta_sigma_abs, P_on, P_off, P_bkg):
     return n_c
 
 
-def xco2_beta(delta_sigma_abs, beta_on=None, beta_off=None):
+def xco2_beta(delta_sigma_abs, beta_att_on, beta_att_off):
     """
     # last input should be P_bkg if included ..
 
@@ -44,22 +44,12 @@ def xco2_beta(delta_sigma_abs, beta_on=None, beta_off=None):
 
     """
 
-    beta_att_on = beta_on
-    beta_att_off = beta_off
-
-    #print(type(beta_on), type(beta_off))
-
     #n_c = np.empty([len(beta_att_on), ])
     #n_c[:] = 0
-    #n_c
 
     # Calculate power from power of outgoing laser pulse, attenuated beta, power of background signal, range resolution
     P_on = _POWER_OUT_LAMBDA_ON * _DELTA_RANGE * beta_att_on  # + P_bkg
     P_off = _POWER_OUT_LAMBDA_OFF * _DELTA_RANGE * beta_att_off  # + P_bkg
-    #print('beta_att_on: mean {}, min {}, max {}'. format(np.mean(beta_att_on), beta_att_on.min(), beta_att_on.max()))
-    #print('beta_att_off: mean {}, min {}, max {}'. format(np.mean(beta_att_off), beta_att_off.min(), beta_att_off.max()))
-    #print('P_on: mean {}, min {}, max {}'. format(np.mean(P_on), P_on.min(), P_on.max()))
-    #print('P_off: mean {}, min {}, max {}'. format(np.mean(P_off), P_off.min(), P_off.max()))
 
     P_on_above = P_on[1:]
     P_off_above = P_off[1:]
@@ -68,7 +58,6 @@ def xco2_beta(delta_sigma_abs, beta_on=None, beta_off=None):
     P_off_below = P_off[:-1]
     # P_bkg_below = P_bkg[0:-1]
     delta_sigma_abs = delta_sigma_abs[:-1]
-    #print('dsabs: mean {}, min {}, max {}'. format(np.mean(delta_sigma_abs), delta_sigma_abs.min(), delta_sigma_abs.max()))
 
     # n_c = np.multiply(1 / (2 * delta_sigma_abs * _DELTA_RANGE),
     #                   np.log(np.multiply(np.divide((P_off_above - P_bkg_above), (P_on_above - P_bkg_above)),
