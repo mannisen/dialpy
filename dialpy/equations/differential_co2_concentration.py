@@ -12,9 +12,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Known constants
-_DELTA_RANGE = 100
-_POWER_OUT_LAMBDA_ON = 1e-15
-_POWER_OUT_LAMBDA_OFF = 1e-15
+_DELTA_RANGE = 25
+_POWER_OUT_LAMBDA_ON = 1e42
+_POWER_OUT_LAMBDA_OFF = 1e42
 
 
 def xco2_power(range_, delta_sigma_abs, P_on, P_off, P_bkg):
@@ -55,20 +55,20 @@ def xco2_beta(delta_sigma_abs, beta_att_on, beta_att_off):
     print('P_on: mean {}, min {}, max {}'. format(np.mean(P_on), P_on.min(), P_on.max()))
     print('P_off: mean {}, min {}, max {}'. format(np.mean(P_off), P_off.min(), P_off.max()))
 
-    P_on_above = P_on[1:-100]
-    P_off_above = P_off[1:-100]
+    P_on_above = P_on[1:]
+    P_off_above = P_off[1:]
     # P_bkg_above = P_bkg[1:]
-    P_on_below = P_on[0:-101]
-    P_off_below = P_off[0:-101]
+    P_on_below = P_on[:-1]
+    P_off_below = P_off[:-1]
     # P_bkg_below = P_bkg[0:-1]
-    delta_sigma_abs = delta_sigma_abs[0:-101]
+    delta_sigma_abs = delta_sigma_abs[:-1]
     print('dsabs: mean {}, min {}, max {}'. format(np.mean(delta_sigma_abs), delta_sigma_abs.min(), delta_sigma_abs.max()))
 
     # n_c = np.multiply(1 / (2 * delta_sigma_abs * _DELTA_RANGE),
     #                   np.log(np.multiply(np.divide((P_off_above - P_bkg_above), (P_on_above - P_bkg_above)),
     #                                      np.divide((P_on_below - P_bkg_below), (P_off_below - P_bkg_below)))))
 
-    n_c = np.multiply(1 / (2 * delta_sigma_abs * _DELTA_RANGE),
+    n_c = np.multiply((1 / (2 * _DELTA_RANGE * delta_sigma_abs)),
                       np.log(np.divide(np.multiply(P_on_below, P_off_above),
                                        np.multiply(P_on_above, P_off_below))))
 
