@@ -46,8 +46,8 @@ x_cov = np.array([[5, 0], [0, .01]])
 # covariance matrix for Y, uncertainty
 y_cov = np.array([[.1]])
 
-# measured observation of Y
-y_obs = np.array(xco2_beta(np.array([.5, .46]), np.array([1e-4, 1e-5]), np.array([1e-4, 1e-4])))
+# measured observation of Y, Y_i = [y_below, y_above], delta_sigma_abs, beta_on, beta_off
+y_obs = np.array(xco2_beta(np.array([.5, .46]), np.array([1e-4, .5e-4]), np.array([1e-4, 1e-4])))
 
 # create optimal estimation object
 oe = pyOE.optimalEstimation(x_vars, x_ap, x_cov, y_vars, y_obs, y_cov, forward)
