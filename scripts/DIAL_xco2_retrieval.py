@@ -25,7 +25,10 @@ def forward(X):
         ratio_of_powers (numpy array): ratio of ON/OFF above/belove powers
 
     """
+
+    # Extract co2 and diff. abs. coefficient
     n_c, delta_sigma_abs_ = X  # X is pd.Series type
+    # ratio of power inverted from the DIAL equation
     ratio_of_powers = np.exp(((1 / (2 * constants.DELTA_RANGE * delta_sigma_abs_)) / n_c)**1)
 
     return ratio_of_powers
