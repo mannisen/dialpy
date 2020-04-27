@@ -67,8 +67,8 @@ co2_ppm_sigma = np.empty((1, 1))
 co2_ppm_sigma[:] = .01
 
 # Covariance matrix of observations
-y_vars = ["delta_sigma_abs", "beta_att_on", "beta_att_off"]
-y_obs = pd.Series([np.array(delta_sigma_abs)], index=['delta_sigma_abs'])
+y_vars = ["delta_sigma_abs", "beta_on", "beta_off"]
+y_obs = pd.Series([np.array(delta_sigma_abs)])
 print(y_obs)
 y_noise = np.array([.001, 1/1e6, 1/1e6])
 S_y = pd.DataFrame(
@@ -80,9 +80,8 @@ S_y = pd.DataFrame(
 # Create optimal estimation object
 #print(obs.shape)
 
-forwardKwArgs = {'delta_sigma_abs': np.array(delta_sigma_abs),
-                 'beta_att_on': np.array(beta_on/1e6),
-                 'beta_att_off': np.array(beta_off/1e6)}
+forwardKwArgs = {'beta_on': np.array(beta_on),
+                 'beta_off': np.array(beta_off)}
 
 oe = pyOE.optimalEstimation(
     priori_names,  # state variable names
@@ -93,6 +92,8 @@ oe = pyOE.optimalEstimation(
     S_y,  # observation uncertainty
     xco2_beta,  # forward Operator
     forwardKwArgs=forwardKwArgs)  # additional function arguments
+
+print(oe)
 
 # Do retrieval
 converged = oe.doRetrieval(maxIter=10)

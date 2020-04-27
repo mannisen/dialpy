@@ -30,7 +30,7 @@ def xco2_power(range_, delta_sigma_abs, P_on, P_off, P_bkg):
     return n_c
 
 
-def xco2_beta(delta_sigma_abs, beta_att_on, beta_att_off):
+def xco2_beta(delta_sigma_abs, beta_on=None, beta_off=None):
     """
     # last input should be P_bkg if included ..
 
@@ -43,6 +43,11 @@ def xco2_beta(delta_sigma_abs, beta_att_on, beta_att_off):
     Returns:
 
     """
+
+    beta_att_on = beta_on
+    beta_att_off = beta_off
+
+    print(type(beta_on), type(beta_off))
 
     n_c = np.empty([len(beta_att_on), ])
     n_c[:] = 0
