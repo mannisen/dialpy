@@ -10,8 +10,8 @@ PATH_TO_HITRAN = 'HITRAN_CO2_transition_data.par'
 DELTA_RANGE = 100  # (m)
 LAMBDA_ON = 1.57141e-6  # (m)
 LAMBDA_OFF = 1.57125e-6  # (m)
-POWER_OUT_LAMBDA_ON = 1e42  # Wrong value & probably not constant!
-POWER_OUT_LAMBDA_OFF = 1e42  # Wrong value & probably not constant!
+POWER_OUT_LAMBDA_ON = 1e3  # Wrong value & probably not constant!
+POWER_OUT_LAMBDA_OFF = 1e3  # Wrong value & probably not constant!
 
 # nu_0
 CENTRAL_WAVELENGTH = 6360  # Probably wrong value
