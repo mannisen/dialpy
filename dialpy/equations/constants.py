@@ -30,3 +30,5 @@ BOLTZMANNS_CONSTANT = 1.3806488e-16  # (erg K-1)
 PLACKS_CONSTANT = 6.62606957e-27  # erg s
 # c
 SPEED_OF_LIGHT = 2.99792458e8  # (m s-1)
+# n_0 Lochsmidts' number for air
+LOCHSMIDTS_NUMBER_AIR = 2.6867811e25 # (m-3)

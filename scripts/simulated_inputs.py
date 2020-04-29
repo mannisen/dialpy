@@ -36,7 +36,7 @@ def sim_delta_sigma_abs(range_):
 
     """
 
-    return .6/10*range_  # very close to the ground
+    return .6/10*range_ + .05  # very close to the ground
 
 
 def sim_noisy_beta_att(len_=400, type_='poly1'):
@@ -62,22 +62,27 @@ def sim_noisy_beta_att(len_=400, type_='poly1'):
     else:
         raise ValueError("Optional input type_= can be 'poly1' or 'poly2' ")
 
-    c = np.empty(400, )
+    c_on = np.empty(400, )
+    c_off = np.empty(400, )
+
     for i in range(len_):
         # role dice to add or subtract noise
         dice = np.random.rand()
         if dice > .5:
-            c[i] = b_n[i] + np.random.uniform(.1, .2)
+            c_on[i] = b_n[i] + np.random.uniform(.1, .2)
+            c_off[i] = b_n[i] + np.random.uniform(.1, .2)
         else:
-            c[i] = b_n[i] - np.random.uniform(.1, .2)
+            c_on[i] = b_n[i] - np.random.uniform(.1, .2)
+            c_off[i] = b_n[i] - np.random.uniform(.1, .2)
 
     # generate off channel, normalize between reasonable values beta_att (Mm-1 sr-1)
-    obs_beta_off = gu.renormalize(c, [c.min(), c.max()], [195, 205])
+    obs_beta_off = gu.renormalize(c_off, [c_off.min(), c_off.max()], [195, 205])
+    obs_beta_on = gu.renormalize(c_on, [c_on.min(), c_on.max()], [195, 205])
 
     # Add absorption step
-    aaa = np.array([0, .075, .5, .925, 1])
+    aaa = np.array([0, .005, .05, 0.1, .5, .9, .95, .995, 1])
 
     # generate on channel
-    obs_beta_on = np.hstack((obs_beta_off[:80], obs_beta_off[80:85]-aaa*50, obs_beta_off[85:]-50))
+    obs_beta_on = np.hstack((obs_beta_on[:80], obs_beta_on[80:89]-aaa*50, obs_beta_on[89:]-50))
 
     return obs_beta_off/1e6, obs_beta_on/1e6
