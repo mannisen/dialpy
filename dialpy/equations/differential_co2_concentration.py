@@ -88,8 +88,8 @@ def xco2_beta(delta_sigma_abs, beta_att_on, beta_att_off, P_out_on=None, P_out_o
     log_ratio_of_powers = np.log(np.divide(np.multiply(P_on[:-1] - P_bkg[0:-1], P_off[1:] - P_bkg[1:]),
                                            np.multiply(P_on[1:] - P_bkg[1:], P_off[:-1] - P_bkg[0:-1])))
 
-    # calculate concentration
-    N_d = np.multiply((1 / (2 * constants.DELTA_RANGE * delta_sigma_abs)), log_ratio_of_powers)
+    # calculate number density
+    N_d = (1 / (2 * constants.DELTA_RANGE * delta_sigma_abs)) * log_ratio_of_powers
 
     return N_d, log_ratio_of_powers
 

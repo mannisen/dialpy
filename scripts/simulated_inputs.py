@@ -31,12 +31,11 @@ def sim_delta_sigma_abs(range_):
         range_ (numpy array): range from instrument
 
     Returns:
-        delta_sigma_abs (numpy array): very crudely estimated differential absorption coefficient,
-        see Han et al. (2017), Fig. 1, https://www.doi.org/10.1109/TGRS.2017.2720618
+        delta_sigma_abs (numpy array): very crudely estimated delta absorption coefficient,
 
     """
 
-    return .6/10*range_ + .05  # very close to the ground
+    return np.repeat(8e-27 - 2.5e-28, len(range_))
 
 
 def sim_noisy_beta_att(len_=400, type_='poly1'):

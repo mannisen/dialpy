@@ -21,10 +21,9 @@ import matplotlib.pyplot as plt
 
 # Read inputs
 range_ = sims.sim_range()
-obs_delta_sigma_abs = sims.sim_delta_sigma_abs(range_)
+delta_sigma_abs = sims.sim_delta_sigma_abs(range_)
 obs_beta_off, obs_beta_on = sims.sim_noisy_beta_att(len(range_), type_='poly1')
-N_d, obs_log_ratio_of_powers = xco2_beta(obs_delta_sigma_abs, obs_beta_on, obs_beta_off)
-obs_ratio_of_powers = np.exp(obs_log_ratio_of_powers[80:90])
+N_d, log_ratio_of_powers = xco2_beta(delta_sigma_abs, obs_beta_on, obs_beta_off)
 
 # Initialize
 resultsOE = {}
@@ -37,52 +36,47 @@ def forward(X):
         X (pandas series): contains CO2 concentration, diff. absorption coefficient, temperature, and pressure
 
     Returns:
-        ratio_of_powers (numpy array): ratio of ON/OFF above/belove powers
+        N_d (numpy array): number density of trace gas (m-3)
 
     """
 
     # Extract co2 and diff. abs. coefficient
     co2_ppm_, delta_sigma_abs_, T_, P_ = X  # X is pd.Series type
 
-    # invert N_d from co2_ppm, delta_sigma_abs, T_, and P_
-    N_d_ = (((1 / constants.LOCHSMIDTS_NUMBER_AIR) * (T_ / 273.15) * (1 / P_) * 1e6) / co2_ppm_)**-1
+    # invert N_d from co2_ppm with given delta_sigma_abs, T_, and P_
+    N_L_ = constants.LOCHSMIDTS_NUMBER_AIR
 
-    # invert ratio of powers (observation) from the DIAL equation
-    ratio_of_powers = np.exp((2 * constants.DELTA_RANGE * delta_sigma_abs_) * N_d_)
-
-    return ratio_of_powers
+    return (co2_ppm_ * N_L_ * 273.15 * P_) / (T_ * 1e6)
 
 
 # define names for X and Y
-x_vars = ["ratio_of_powers", "delta_sigma_abs", "temperature", "pressure"]
-y_vars = ["obs_ratio_of_powers"]
+x_vars = ["co2_ppm", "delta_sigma_abs", "temperature", "pressure"]
+y_vars = ["N_d"]
 
 # first guess for X
-co2_ppm = np.repeat(400, len(range_[80:90]) - 1)  # (ppm)
-T_ = np.repeat(293, len(range_[80:90]) - 1)
-P_ = np.repeat(1, len(range_[80:90]) - 1)
-delta_sigma_abs = np.repeat(1, len(range_[80:90]) - 1)
+co2_ppm = np.repeat(400, len(range_) - 1)  # (ppm)
+T_ = np.repeat(293, len(range_) - 1)
+P_ = np.repeat(1, len(range_) - 1)
 
-for i in range(len(range_[80:90])):
+for i in range(len(range_)):
 
     resultsOE['%s' % (y_vars[0])] = []
 
-    x_ap = pd.Series([co2_ppm[i], obs_delta_sigma_abs[i], T_[i], P_[i]], index=x_vars)
+    x_ap = [co2_ppm[i], delta_sigma_abs[i], T_[i], P_[i]]
 
     # covariance matrix for X, uncertainties
-    x_cov = np.array([[5, 0, 0, 0], [0, .01, 0, 0], [0, 0, 1, 0], [0, 0, 0, .1]])
-
+    x_cov = np.array([[5.35, 0, 0, 0], [0, .000067, 0, 0], [0, 0, 1.7e0, 0], [0, 0, 0, 1.5e-1]])
     # covariance matrix for Y, uncertainty
-    y_cov = np.array([[.001]])
+    y_cov = np.array([1e20])
 
     # measured observation of Y, Y_i = [y_below, y_above], delta_sigma_abs, beta_on, beta_off
-    y_obs = pd.Series([obs_ratio_of_powers[i]], index=y_vars)
+    y_obs = np.array(N_d[i])
 
     # create optimal estimation object
     oe = pyOE.optimalEstimation(x_vars, x_ap, x_cov, y_vars, y_obs, y_cov, forward)
 
     # run the retrieval
-    converged = oe.doRetrieval(maxIter=1000, maxTime=1000000.0)
+    converged = oe.doRetrieval(maxIter=10)
 
     if converged:
         # Store results in xarray DataArray

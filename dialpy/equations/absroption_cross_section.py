@@ -114,7 +114,7 @@ def integrand(t, x, y):
     return np.exp(-t**2) / (x+(y-t)**2)
 
 
-def abs_cross_section(S_, gamma_L, gamma_D, nu, nu_0):
+def absorption_cross_section(S_, gamma_L, gamma_D, nu, nu_0):
     """
 
     Args:
@@ -131,13 +131,23 @@ def abs_cross_section(S_, gamma_L, gamma_D, nu, nu_0):
 
     x = (gamma_L / gamma_D)**2 * np.log(2)
     y = ((nu-nu_0) / gamma_D) * np.log(2)**(1/2)
+    print(x.shape, y.shape)
     sigma_abs = S_ * (np.log(2) / np.pi**(3/2)) * (gamma_L / gamma_D**2) * quad(integrand, -np.inf, np.inf,
                                                                                 args=(x, y))[0]
 
     return sigma_abs
 
 
-def differential_absorption_cross_section(T_, P_):
+def delta_absorption_cross_section(T_, P_):
+    """
+
+    Args:
+        T_:
+        P_:
+
+    Returns:
+
+    """
 
     nu_ON = 1 / constants.LAMBDA_ON
     nu_OFF = 1 / constants.LAMBDA_OFF
@@ -156,7 +166,7 @@ def differential_absorption_cross_section(T_, P_):
     gamma_L_ON = pressure_broadened_linewidth(gamma_0_ON, P_, P_0, T_0, T_, a_ON)
     gamma_L_OFF = pressure_broadened_linewidth(gamma_0_OFF, P_, P_0, T_0, T_, a_OFF)
     gamma_D = doppler_broadened_linewidth(nu_0, c_, k_, T_, m_)
-    sigma_abs_ON = abs_cross_section(S_ON, gamma_L_ON, gamma_D, nu_ON, nu_0)
-    sigma_abs_OFF = abs_cross_section(S_OFF, gamma_L_OFF, gamma_D, nu_OFF, nu_0)
+    sigma_abs_ON = absorption_cross_section(S_ON, gamma_L_ON, gamma_D, nu_ON, nu_0)
+    sigma_abs_OFF = absorption_cross_section(S_OFF, gamma_L_OFF, gamma_D, nu_OFF, nu_0)
 
     return sigma_abs_ON - sigma_abs_OFF
