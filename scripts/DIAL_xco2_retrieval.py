@@ -12,7 +12,6 @@ from __future__ import unicode_literals
 import numpy as np
 from dialpy.pyOptimalEstimation import pyOptimalEstimation as pyOE
 from dialpy.equations.differential_co2_concentration import xco2_beta
-from dialpy.equations.differential_co2_concentration import C_co2_ppm
 from dialpy.equations import constants
 from scripts import simulated_inputs as sims
 import pandas as pd
@@ -22,7 +21,7 @@ import matplotlib.pyplot as plt
 # Read inputs
 range_ = sims.sim_range()
 delta_sigma_abs = sims.sim_delta_sigma_abs(range_)
-obs_beta_off, obs_beta_on = sims.sim_noisy_beta_att(len(range_), type_='poly1')
+obs_beta_off, obs_beta_on = sims.sim_noisy_beta_att(len(range_), type_='poly2')
 N_d, log_ratio_of_powers = xco2_beta(delta_sigma_abs, obs_beta_on, obs_beta_off)
 
 # Initialize
@@ -41,16 +40,16 @@ def forward(X):
     """
 
     # Extract co2 and diff. abs. coefficient
-    co2_ppm_, delta_sigma_abs_, T_, P_ = X  # X is pd.Series type
+    co2_ppm_, T_, P_ = X  # X is pd.Series type
 
     # invert N_d from co2_ppm with given delta_sigma_abs, T_, and P_
     N_L_ = constants.LOCHSMIDTS_NUMBER_AIR
 
-    return (co2_ppm_ * N_L_ * 273.15 * P_) / (T_ * 1e6)
+    return (co2_ppm_ * N_L_ * 273.15 * P_) / (T_ * 1e6) / 1e22
 
 
 # define names for X and Y
-x_vars = ["co2_ppm", "delta_sigma_abs", "temperature", "pressure"]
+x_vars = ["co2_ppm", "temperature", "pressure"]
 y_vars = ["N_d"]
 
 # first guess for X
@@ -58,34 +57,63 @@ co2_ppm = np.repeat(400, len(range_) - 1)  # (ppm)
 T_ = np.repeat(293, len(range_) - 1)
 P_ = np.repeat(1, len(range_) - 1)
 
-for i in range(len(range_)):
+res = np.empty([len(co2_ppm), 3])
+res[:] = np.nan
+res[:, 0] = range_[:-1]
 
-    resultsOE['%s' % (y_vars[0])] = []
+for i in range(len(range_)-1):
 
-    x_ap = [co2_ppm[i], delta_sigma_abs[i], T_[i], P_[i]]
+    x_ap = [co2_ppm[i], T_[i], P_[i]]
 
     # covariance matrix for X, uncertainties
-    x_cov = np.array([[5.35, 0, 0, 0], [0, .000067, 0, 0], [0, 0, 1.7e0, 0], [0, 0, 0, 1.5e-1]])
+    x_cov = np.array([[50, 0, 0], [0, 1, 0], [0, 0, .1]])
     # covariance matrix for Y, uncertainty
-    y_cov = np.array([1e20])
+    y_cov = np.array([10])
 
     # measured observation of Y, Y_i = [y_below, y_above], delta_sigma_abs, beta_on, beta_off
-    y_obs = np.array(N_d[i])
+    y_obs = np.array(N_d[i]/1e21)
 
     # create optimal estimation object
     oe = pyOE.optimalEstimation(x_vars, x_ap, x_cov, y_vars, y_obs, y_cov, forward)
 
     # run the retrieval
-    converged = oe.doRetrieval(maxIter=10)
+    converged = oe.doRetrieval(maxIter=100)
 
     if converged:
         # Store results in xarray DataArray
         summary = oe.summarize()
-        print(range_[i], summary['x_op'][0], summary['y_op'])
+        print(range_[i], summary['x_op'][0], summary['y_op'][0])
 
-        #resultsOE['%s' % (y_vars[0])].append(summary)
+        res[i, 1] = float(summary['x_op'][0])
+        res[i, 2] = float(summary['y_op'][0]*1e22)
 
-# plt.show()
+print(res.shape)
 
-# store results in xarray Dataset structure
-#resultsOE['%s' % (y_vars[0])] = xr.concat(resultsOE['%s' % (y_vars[0])], dim='range_')
+fig = plt.figure()
+
+ax0 = plt.subplot2grid((1, 3), (0, 0), rowspan=1, colspan=1)
+p01 = ax0.plot(obs_beta_off*1e6, range_, label='$\\beta_{att}$ OFF')
+p02 = ax0.plot(obs_beta_on*1e6, range_, label='$\\beta_{att}$ ON')
+ax0.legend(loc='upper right')
+ax0.set_xlabel("(Mm-1 sr-1)")
+ax0.set_ylabel("range (km)")
+ax0.grid()
+
+ax1 = plt.subplot2grid((1, 3), (0, 1), rowspan=1, colspan=1)
+p11 = ax1.plot(N_d, range_[:-1], label='Observed N_d')
+p12 = ax1.plot(res[:, 2], range_[:-1], label='Optimal N_d')
+ax1.legend(loc='upper right')
+ax1.set_xlabel("(# m-3)")
+ax1.grid()
+
+ax2 = plt.subplot2grid((1, 3), (0, 2), rowspan=1, colspan=1)
+p21 = ax2.plot(res[:, 1], range_[:-1], label='Retrieved CO2')
+p22 = ax2.plot(co2_ppm, range_[:-1], label='Initial guess of CO2')
+ax2.legend(loc='upper right')
+ax2.set_xlabel("(ppm)")
+ax2.grid()
+
+fig.tight_layout()
+plt.savefig("DIAL_OE_test_co2_v2.png", facecolor='w', edgecolor='w',
+            format="png", bbox_inches="tight", pad_inches=0.1)
+plt.close()

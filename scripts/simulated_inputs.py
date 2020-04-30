@@ -68,20 +68,22 @@ def sim_noisy_beta_att(len_=400, type_='poly1'):
         # role dice to add or subtract noise
         dice = np.random.rand()
         if dice > .5:
-            c_on[i] = b_n[i] + np.random.uniform(.1, .2)
-            c_off[i] = b_n[i] + np.random.uniform(.1, .2)
+            c_on[i] = b_n[i] + np.random.rand()*.33
+            c_off[i] = b_n[i] + np.random.rand()*.33
+            print(b_n[i], c_on[i])
+
         else:
-            c_on[i] = b_n[i] - np.random.uniform(.1, .2)
-            c_off[i] = b_n[i] - np.random.uniform(.1, .2)
+            c_on[i] = b_n[i] - np.random.rand()*.33
+            c_off[i] = b_n[i] - np.random.rand()*.33
 
     # generate off channel, normalize between reasonable values beta_att (Mm-1 sr-1)
-    obs_beta_off = gu.renormalize(c_off, [c_off.min(), c_off.max()], [195, 205])
-    obs_beta_on = gu.renormalize(c_on, [c_on.min(), c_on.max()], [195, 205])
+    obs_beta_off = gu.renormalize(c_off, [c_off.min(), c_off.max()], [160, 240])
+    obs_beta_on = gu.renormalize(c_on, [c_on.min(), c_on.max()], [160, 240])
 
     # Add absorption step
     aaa = np.array([0, .005, .05, 0.1, .5, .9, .95, .995, 1])
 
     # generate on channel
-    obs_beta_on = np.hstack((obs_beta_on[:80], obs_beta_on[80:89]-aaa*50, obs_beta_on[89:]-50))
+    obs_beta_on = np.hstack((obs_beta_on[:80], obs_beta_on[80:89]-aaa*35, obs_beta_on[89:]-35))
 
     return obs_beta_off/1e6, obs_beta_on/1e6
