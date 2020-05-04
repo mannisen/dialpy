@@ -84,6 +84,6 @@ def sim_noisy_beta_att(len_=400, type_='poly1'):
     aaa = np.array([0, .005, .05, 0.1, .5, .9, .95, .995, 1])
 
     # generate on channel
-    obs_beta_on = np.hstack((obs_beta_on[:80], obs_beta_on[80:89]-aaa*35, obs_beta_on[89:]-35))
+    obs_beta_on = np.hstack((obs_beta_on[:80], obs_beta_on[80:89]-aaa*100, obs_beta_on[89:]-100))
 
     return obs_beta_off/1e6, obs_beta_on/1e6

@@ -66,9 +66,9 @@ for i in range(len(range_)-1):
     x_ap = [co2_ppm[i], T_[i], P_[i]]
 
     # covariance matrix for X, uncertainties
-    x_cov = np.array([[50, 0, 0], [0, 1, 0], [0, 0, .1]])
+    x_cov = np.array([[5, 0, 0], [0, 1, 0], [0, 0, .1]])
     # covariance matrix for Y, uncertainty
-    y_cov = np.array([10])
+    y_cov = np.array([1])
 
     # measured observation of Y, Y_i = [y_below, y_above], delta_sigma_abs, beta_on, beta_off
     y_obs = np.array(N_d[i]/1e21)
