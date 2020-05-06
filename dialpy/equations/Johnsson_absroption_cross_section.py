@@ -154,7 +154,7 @@ def delta_absorption_cross_section(T_, P_):
     nu_0_ON, S_0_ON, gamma_0_ON, E_ON, a_ON = read_hitran_data(nu_ON)
     nu_0_OFF, S_0_OFF, gamma_0_OFF, E_OFF, a_OFF = read_hitran_data(nu_OFF)
     T_0 = constants.REFERENCE_ABS_TEMPERATURE
-    h_ = constants.PLACKS_CONSTANT
+    h_ = constants.PLANCKS_CONSTANT
     k_ = constants.BOLTZMANNS_CONSTANT
     c_ = constants.SPEED_OF_LIGHT
     P_0 = constants.STANDARD_PRESSURE

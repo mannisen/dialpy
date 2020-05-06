@@ -10,7 +10,6 @@ Finnish Meteorological Institute
 
 import numpy as np
 import pandas as pd
-from scipy.integrate import quad
 from dialpy.utilities import general_utils as gu
 from dialpy.equations import constants
 
@@ -70,16 +69,17 @@ def total_internal_partition_sum(T_):
 
     """
 
-    data = pd.read_csv(constants.PATH_TO_HITRAN, delimiter=',', header=None)
+    data = pd.read_csv(constants.PATH_TO_TOTAL_INTERNAL_SUM, delimiter=',', header=None)
     idx, _ = gu.find_nearest(np.array(data.values[:, 0]), T_)
 
-    return data.values[idx, 1]
+    return float(data.values[idx, 1])
 
 
-def recalculate_spectral_line_intensity(S_ij, Q_T, E_, T_, nu_ij):
+def spectral_line_intensity(range_, S_0_ij, Q_T, E_, T_, nu_ij, co2_ppm):
     """
 
     Args:
+        range_ (float): range from instrument (m)
         S_ij: (float):
         Q_296K: (float): total internal partition sum for the temperature of 296 K
         Q_T: (float): total internal partition sum value for the calculation temperature
@@ -87,16 +87,47 @@ def recalculate_spectral_line_intensity(S_ij, Q_T, E_, T_, nu_ij):
         E_: (float):
         T_: (float): temperature (K)
         nu_ij: (float):
+        co2_ppm (float):
 
     Returns:
-        S*_ij (float):
+        S_L (float):
 
     """
-    c_2 = constants.SECOND_BLACK_BODY_RADIATION_CONSTANT
     Q_296K = constants.TOTAL_INTERNAL_PARTITION_SUM_296K_CO2
+    B = 0.984204  # isotope abundance of 12C16O2, the most abundant
+    B_T = B  # in terrestrial atmosphere
+    N_L = constants.LOCHSMIDTS_NUMBER_AT_1ATM_296K
+    L_ = range_ * 1e2 * 2  # 1e2 for m --> cm, 2 for round trip
+    P_mol = 1 * co2_ppm/1e4  # (atm), ppm --> % and multiplied with 1 atm
+    k_ = constants.BOLTZMANNS_CONSTANT
+    h_ = constants.PLANCKS_CONSTANT
+    c_2 = constants.SPEED_OF_LIGHT * 1e2 * h_ / k_  # c_2 second black body radiation constant (cm K)
 
-    return S_ij * (Q_296K / Q_T) * (np.exp(-c_2 * E_ / T_) / np.exp(-c_2 * E_ / 296)) * \
+    # S*_ij
+    Ss_ij = S_0_ij * (Q_296K / Q_T) * (np.exp(-c_2 * E_ / T_) / np.exp(-c_2 * E_ / 296)) * \
            ((1 - np.exp(-c_2 * nu_ij / T_)) / (1 - np.exp(-c_2 * nu_ij / 296)))
 
+    # S_L
+    return Ss_ij * (B / B_T) * (296 / T_) * N_L * P_mol * L_
 
-def
+
+def doppler_HWHM(nu_ij, T_):
+    """
+
+    Args:
+        nu_ij (float):
+        T_ (float): temperature (K)
+
+    Returns:
+        alpha_Doppler (float):
+
+    """
+
+    c_ = constants.SPEED_OF_LIGHT
+    N_A = constants.AVOGADRO_NUMBER
+    k_ = constants.BOLTZMANNS_CONSTANT
+    W_g = constants.MOLAR_MASS_CO2
+
+    return nu_ij / c_ * np.sqrt((2 * N_A * k_ * T_ * np.log(2)) / (1e-3 * W_g))
+
+
