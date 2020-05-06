@@ -23,12 +23,13 @@ def read_hitran_data(nu_):
 
     # Columns:  Isotopologue nu S A gamma_air gamma_self E" n_air delta_air J' J"
     idx, _ = gu.find_nearest(np.array(data.values[:, 1]), nu_)
+    nu_0 = data.values[idx, 1]
     S_0 = data.values[idx, 2]
     gamma_0 = data.values[idx, 5] / 1e2  # (m / 1 atm)
     E_ = data.values[idx, 6] / 1e2
     a_ = data.values[idx, 7]
 
-    return S_0, gamma_0, E_, a_
+    return nu_0, S_0, gamma_0, E_, a_
 
 
 def line_intensity(S_0, T_0, T_, h_, c_, nu_0, k_, E_):
@@ -131,7 +132,6 @@ def absorption_cross_section(S_, gamma_L, gamma_D, nu, nu_0):
 
     x = (gamma_L / gamma_D)**2 * np.log(2)
     y = ((nu-nu_0) / gamma_D) * np.log(2)**(1/2)
-    print(x.shape, y.shape)
     sigma_abs = S_ * (np.log(2) / np.pi**(3/2)) * (gamma_L / gamma_D**2) * quad(integrand, -np.inf, np.inf,
                                                                                 args=(x, y))[0]
 
@@ -151,22 +151,22 @@ def delta_absorption_cross_section(T_, P_):
 
     nu_ON = 1 / constants.LAMBDA_ON
     nu_OFF = 1 / constants.LAMBDA_OFF
-    S_0_ON, gamma_0_ON, E_ON, a_ON = read_hitran_data(nu_ON)
-    S_0_OFF, gamma_0_OFF, E_OFF, a_OFF = read_hitran_data(nu_OFF)
+    nu_0_ON, S_0_ON, gamma_0_ON, E_ON, a_ON = read_hitran_data(nu_ON)
+    nu_0_OFF, S_0_OFF, gamma_0_OFF, E_OFF, a_OFF = read_hitran_data(nu_OFF)
     T_0 = constants.REFERENCE_ABS_TEMPERATURE
     h_ = constants.PLACKS_CONSTANT
     k_ = constants.BOLTZMANNS_CONSTANT
     c_ = constants.SPEED_OF_LIGHT
-    nu_0 = constants.CENTRAL_WAVELENGTH
     P_0 = constants.STANDARD_PRESSURE
     m_ = constants.MOLECULAR_MASS_CO2
 
-    S_ON = line_intensity(S_0_ON, T_0, T_, h_, c_, nu_0, k_, E_ON)
-    S_OFF = line_intensity(S_0_OFF, T_0, T_, h_, c_, nu_0, k_, E_OFF)
+    S_ON = line_intensity(S_0_ON, T_0, T_, h_, c_, nu_0_ON, k_, E_ON)
+    S_OFF = line_intensity(S_0_OFF, T_0, T_, h_, c_, nu_0_OFF, k_, E_OFF)
     gamma_L_ON = pressure_broadened_linewidth(gamma_0_ON, P_, P_0, T_0, T_, a_ON)
     gamma_L_OFF = pressure_broadened_linewidth(gamma_0_OFF, P_, P_0, T_0, T_, a_OFF)
-    gamma_D = doppler_broadened_linewidth(nu_0, c_, k_, T_, m_)
-    sigma_abs_ON = absorption_cross_section(S_ON, gamma_L_ON, gamma_D, nu_ON, nu_0)
-    sigma_abs_OFF = absorption_cross_section(S_OFF, gamma_L_OFF, gamma_D, nu_OFF, nu_0)
+    gamma_D_ON = doppler_broadened_linewidth(nu_0_ON, c_, k_, T_, m_)
+    gamma_D_OFF = doppler_broadened_linewidth(nu_0_OFF, c_, k_, T_, m_)
+    sigma_abs_ON = absorption_cross_section(S_ON, gamma_L_ON, gamma_D_ON, nu_ON, nu_0_ON)
+    sigma_abs_OFF = absorption_cross_section(S_OFF, gamma_L_OFF, gamma_D_OFF, nu_OFF, nu_0_OFF)
 
     return sigma_abs_ON - sigma_abs_OFF
