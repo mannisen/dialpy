@@ -256,18 +256,48 @@ def voigt_abrarov_quine(x, y):
 
 
 def voigt(nu, nu_ij_shifted, alpha_doppler, gamma):
+    """
+
+    Args:
+        nu:
+        nu_ij_shifted:
+        alpha_doppler:
+        gamma:
+
+    Returns:
+        f_voigt: (float)
+
+    """
 
     x_ = (np.sqrt(np.log(2)) * (nu - nu_ij_shifted)) / alpha_doppler
     y_ = (np.sqrt(2) * gamma) / alpha_doppler
 
     return voigt_abrarov_quine(x_, y_)
 
-def absorption_coefficient(range_, T_, co2_ppm):
 
+def absorption_coefficient(range_, nu_, T_, co2_ppm, P_):
+    """
 
+    Args:
+        range_: (float)
+        nu_: (float)
+        T_: (float)
+        co2_ppm: (float)
+        P_: (float)
 
-    S_L = spectral_line_intensity(range_, S_0_ij, Q_T, E_, T_, nu_ij, co2_ppm):
+    Returns:
 
+    """
+
+    nu_0, S_0, gamma_air, gamma_self, E_, n_air, delta_air = read_hitran_data(nu_)
+    Q_T = total_internal_partition_sum(T_)
+    S_L = spectral_line_intensity(range_, S_0, Q_T, E_, T_, nu_, co2_ppm)
+
+    nu_ij_shifted = shifted_spectral_line(nu_, delta_air, P_)
+    alpha_doppler = doppler_HWHM(nu_, T_)
+    P_mol = 1 * co2_ppm / 1e4  # (atm), ppm --> % and multiplied with 1 atm
+    gamma = lorentzian_HWHM(T_, n_air, gamma_air, P_, P_mol, gamma_self)
+    f_voigt = voigt(nu_, nu_ij_shifted, alpha_doppler, gamma)
 
     return S_L * f_voigt
 
