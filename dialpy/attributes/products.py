@@ -107,7 +107,54 @@ PRODUCT_ATTRIBUTES = {
         "units": "m s-1",
         "comment": "See Eq. (10-11) in doi:10.5194/amt-8-2251-2015, and Eq. (7) in doi:10.5194/amt-10-1229-2017.",
         "dim_name": ("time", "range")},
-
+    "N_d_0": {
+        "standard_name": "number_density",
+        "long_name": "initial number density",
+        "units": "m-3",
+        "comment": "initial value calculated with Eq. (3) in doi:10.1364/AO.52.002994",
+        "dim_name": ("time", "range")},
+    "N_d_retrieved": {
+        "standard_name": "number_density_retrieved",
+        "long_name": "optimal number density",
+        "units": "m-3",
+        "comment": "optimal observation associated with retrieval solution",
+        "dim_name": ("time", "range")},
+    "CO2_ppm": {
+        "standard_name": "carbon_dioxide_concentration",
+        "long_name": "retrieved CO2 concentration",
+        "units": "ppm",
+        "comment": "optimal estimation method retrieval solution, calculated with Eq. (7) in doi:10.1364/AO.52.002994",
+        "dim_name": ("time", "range")},
+    "CO2_ppm_priori": {
+        "standard_name": "carbon_dioxide_concentration_priori",
+        "long_name": "priori CO2 concentration",
+        "units": "ppm",
+        "comment": "modelled or measured background CO2 (ppm), prior knowledge",
+        "dim_name": ("time", "range")},
+    "temperature_optimal": {
+        "standard_name": "temperature_optimal",
+        "long_name": "optimal temperature",
+        "units": "K",
+        "comment": "optimal state given the observations",
+        "dim_name": ("time", "range")},
+    "temperature": {
+        "standard_name": "temperature",
+        "long_name": "temperature",
+        "units": "K",
+        "comment": "modelled or measured temperature, priori for the optimal estimation",
+        "dim_name": ("time", "range")},
+    "pressure_optimal": {
+        "standard_name": "pressure_optimal",
+        "long_name": "optimal pressure",
+        "units": "atm",
+        "comment": "optimal state given the observations",
+        "dim_name": ("time", "range")},
+    "pressure": {
+        "standard_name": "pressure",
+        "long_name": "atmospheric pressure",
+        "units": "atm",
+        "comment": "modelled or measured temperature, priori for the optimal estimation",
+        "dim_name": ("time", "range")},
 }
 
 

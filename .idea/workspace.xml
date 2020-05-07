@@ -3,8 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="f22e23b9-f530-415a-b193-b69591013d54" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dialpy/equations/bytran_abs_cross_section.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/equations/bytran_abs_cross_section.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dialpy/equations/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/equations/constants.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dialpy/attributes/products.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/attributes/products.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dialpy/pyOptimalEstimation" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/pyOptimalEstimation" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dialpy/pyOptimalEstimation/pyOptimalEstimation/pyOEcore.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/pyOptimalEstimation/pyOptimalEstimation/pyOEcore.py" afterDir="false" />
     </list>
