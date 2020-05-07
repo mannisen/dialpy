@@ -27,9 +27,10 @@ def read_hitran_data(nu_):
     Returns:
         nu_0:
         S_0:
-        gamma_0:
-        E_:
-        a_:
+        gamma_air: (float) air-broadened HWHM at T_ref = 296 K and P_ref = 1 atm (cm−1 atm-1)
+        gamma_self: (float) self-broadened HWHM at T_ref = 296 K and P_ref = 1 atm (cm−1 atm-1)
+        E_: (float) lower-state energy of the transition (cm -1)
+        n_air: coefficient of the temperature dependence of the air-broadened half width
 
     """
 
@@ -86,12 +87,12 @@ def spectral_line_intensity(range_, S_0_ij, Q_T, E_, T_, nu_ij, co2_ppm):
 
     Args:
         range_: (float) range from instrument (m)
-        S_0_ij: (float)
+        S_0_ij: (float) spectral line intensity at 296 K (cm−1 / (molecule cm−2))
         Q_T: (float) total internal partition sum value for the calculation temperature
-        E_: (float)
+        E_: (float) lower-state energy of the transition (cm -1)
         T_: (float) temperature (K)
-        nu_ij: (float)
-        co2_ppm: (float)
+        nu_ij: (float) wavenumber of the spectral line transition in vacuum (cm-1)
+        co2_ppm: (float) CO2 concentration (ppm)
 
     Returns:
         S_L: (float)
@@ -136,13 +137,15 @@ def doppler_HWHM(nu_ij, T_):
 def lorentzian_HWHM(T_, n_air, gamma_air, P_, P_mol, gamma_self):
     """
 
+    HWHM: half width at hafl maximum
+
     Args:
         T_:
         n_air:
-        gamma_air:
-        P_:
-        P_mol:
-        gamma_self:
+        gamma_air: (float) air-broadened HWHM at T_ref = 296 K and P_ref = 1 atm (cm−1 atm-1)
+        gamma_self: (float) self-broadened HWHM at T_ref = 296 K and P_ref = 1 atm (cm−1 atm-1)
+        P_: (float) pressure (atm)
+        P_mol: (float) partial pressure of the gas (atm)
 
     Returns:
         gamma: (float)
@@ -227,25 +230,27 @@ def voigt_abrarov_quine(x, y):
 
     """
 
-    coeff = np.array([2.307372754308023e-001, 4.989787261063716e-002, 1.464495070025765e+000,
-                      7.760531995854886e-001, 4.490808534957343e-001, -3.230894193031240e-001,
-                      4.235506885098250e-002, 1.247446815265929e+000, -5.397724160374686e-001,
-                      -2.340509255269456e-001, 2.444995757921221e+000, -6.547649406082363e-002,
-                      -4.557204758971222e-002, 4.041727681461610e+000, 2.411056013969393e-002,
-                      5.043797125559205e-003, 6.037642585887094e+000, 4.001198804719684e-003,
-                      1.180179737805654e-003, 8.432740471197681e+000, -5.387428751666454e-005,
-                      1.754770213650354e-005, 1.122702133739336e+001, -2.451992671326258e-005,
-                      -3.325020499631893e-006, 1.442048518447414e+001, -5.400164289522879e-007,
-                      -9.375402319079375e-008, 1.801313201244001e+001, 1.771556420016014e-008,
-                      8.034651067438904e-010, 2.200496182129099e+001, 4.940360170163906e-010,
-                      3.355455275373310e-011, 2.639597461102705e+001, 5.674096644030151e-014])
+    coeff = np.array([[2.307372754308023e-001, 4.989787261063716e-002, 1.464495070025765e+000],
+                      [7.760531995854886e-001, 4.490808534957343e-001, -3.230894193031240e-001],
+                      [4.235506885098250e-002, 1.247446815265929e+000, -5.397724160374686e-001],
+                      [-2.340509255269456e-001, 2.444995757921221e+000, -6.547649406082363e-002],
+                      [-4.557204758971222e-002, 4.041727681461610e+000, 2.411056013969393e-002],
+                      [5.043797125559205e-003, 6.037642585887094e+000, 4.001198804719684e-003],
+                      [1.180179737805654e-003, 8.432740471197681e+000, -5.387428751666454e-005],
+                      [1.754770213650354e-005, 1.122702133739336e+001, -2.451992671326258e-005],
+                      [-3.325020499631893e-006, 1.442048518447414e+001, -5.400164289522879e-007],
+                      [-9.375402319079375e-008, 1.801313201244001e+001, 1.771556420016014e-008],
+                      [8.034651067438904e-010, 2.200496182129099e+001, 4.940360170163906e-010],
+                      [3.355455275373310e-011, 2.639597461102705e+001, 5.674096644030151e-014]])
+
+    print(coeff.shape)
 
     mMax = 12
     varsigma = 2.75  # define the shift constant
     y = np.abs(y) + varsigma / 2
-    arr1 = y.ˆ2 - x.ˆ2  # define 1st repeating array
-    arr2 = x.ˆ2 + y.ˆ2  # define 2nd repeating array
-    arr3 = arr2.ˆ2  # define 3rd repeating array
+    arr1 = y**2 - x**2  # define 1st repeating array
+    arr2 = x**2 + y**2  # define 2nd repeating array
+    arr3 = arr2**2  # define 3rd repeating array
     VF = 0  # initiate VF
     for m in range(mMax):
         VF += + (coeff[m, 0] * (coeff[m, 1] + arr1) +
@@ -293,8 +298,8 @@ def absorption_coefficient(range_, nu_, T_, co2_ppm, P_):
     Q_T = total_internal_partition_sum(T_)
     S_L = spectral_line_intensity(range_, S_0, Q_T, E_, T_, nu_, co2_ppm)
 
-    nu_ij_shifted = shifted_spectral_line(nu_, delta_air, P_)
-    alpha_doppler = doppler_HWHM(nu_, T_)
+    nu_ij_shifted = shifted_spectral_line(nu_0, delta_air, P_)
+    alpha_doppler = doppler_HWHM(nu_0, T_)
     P_mol = 1 * co2_ppm / 1e4  # (atm), ppm --> % and multiplied with 1 atm
     gamma = lorentzian_HWHM(T_, n_air, gamma_air, P_, P_mol, gamma_self)
     f_voigt = voigt(nu_, nu_ij_shifted, alpha_doppler, gamma)

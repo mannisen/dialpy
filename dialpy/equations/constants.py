@@ -12,8 +12,8 @@ PATH_TO_TOTAL_INTERNAL_SUM = 'total_internal_partition_sum.csv'
 DELTA_RANGE = 100  # (m)
 
 # DIAL wavelengths
-LAMBDA_ON = 1.57141e-6  # (m)
-LAMBDA_OFF = 1.57125e-6  # (m)
+LAMBDA_ON = 1571.41 / 1e9  # (m)
+LAMBDA_OFF = 1571.25 / 1e9  # (m)
 
 # P_0
 STANDARD_PRESSURE = 101325  # (Pa)
