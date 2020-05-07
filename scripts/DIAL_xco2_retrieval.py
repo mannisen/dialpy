@@ -14,9 +14,8 @@ from dialpy.pyOptimalEstimation import pyOptimalEstimation as pyOE
 from dialpy.equations.differential_co2_concentration import xco2_beta
 from dialpy.equations import constants
 from scripts import simulated_inputs as sims
-import pandas as pd
-import xarray as xr
 import matplotlib.pyplot as plt
+from dialpy.utilities.dl_var_atts import dl_var_atts as vatts
 
 # Read inputs
 range_ = sims.sim_range()
@@ -87,7 +86,10 @@ for i in range(len(range_)-1):
         res[i, 1] = float(summary['x_op'][0])
         res[i, 2] = float(summary['y_op'][0]*1e22)
 
-print(res.shape)
+
+# data_out.append(vatts("u", data=u_wind, dim_size=data_out[2].dim_size))
+# data_out.append(vatts("v", data=v_wind, dim_size=data_out[2].dim_size))
+
 
 fig = plt.figure()
 

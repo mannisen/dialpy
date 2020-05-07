@@ -6,8 +6,8 @@ Created on Thu Jun 13 11:08:40 2019
 @author: manninan
 """
 import netCDF4
-from dopplerlidarpy.attributes.common import COMMON_ATTRIBUTES
-from dopplerlidarpy.attributes.products import PRODUCT_ATTRIBUTES
+from dialpy.attributes.common import COMMON_ATTRIBUTES
+from dialpy.attributes.products import PRODUCT_ATTRIBUTES
 
 
 class NetcdfAttributeError(Exception):
