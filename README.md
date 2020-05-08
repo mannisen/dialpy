@@ -19,7 +19,7 @@ How to get started:
 
       and you should see:
 
-      `DIAL_OE_test_co2.png
+      `DIAL_OE_test_co2.png\
       DIAL_OE_test_co2_v2.png
       dialpy
       HITRAN_CO2_transition_data.par
