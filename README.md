@@ -1,22 +1,26 @@
 # dialpy
 
-Not published, under development.
+----
+2020-05-08
+Antti J Manninen
+Finnish Meteorological Institute
 
-Go to terminal
+----
+## Get started:
+1) Clone from github
+  - Open to terminal and cd to the folder you want the code package be downloaded to
+  - type:
+      `git clone https://github.com/dl-fmi/dialpy`
+      `cd dialpy`
+      `ls`
 
-git clone...
+   - and you should see:
+   `DIAL_OE_test_co2.png  DIAL_OE_test_co2_v2.png  dialpy  HITRAN_CO2_transition_data.par  __init__.py
+   oe_result.png  README.md  scripts  setup.py  total_internal_partition_sum.csv`
 
-cd ../dialpy
-
-ls
-
--you should see:
-
-'DIAL_OE_test_co2.png  DIAL_OE_test_co2_v2.png  dialpy  HITRAN_CO2_transition_data.par  __init__.py
-oe_result.png  README.md  scripts  setup.py  total_internal_partition_sum.csv'
-
-Then, in the current working directory the DIAL retrieval code can be run by typing:
-python3 -m scripts.DIAL_xco2_retrieval
+2) Run the retrieval
+   - In the current working directory the DIAL retrieval code can be run by typing:
+     `python3 -m scripts.DIAL_xco2_retrieval`
 
 Simulated inputs are read, retrieval run, and results are written into a netcdf file in folder "".
 Results are plotted into the same folder into file "".

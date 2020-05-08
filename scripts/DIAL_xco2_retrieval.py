@@ -125,6 +125,6 @@ ax2.set_xlabel("(ppm)")
 ax2.grid()
 
 fig.tight_layout()
-plt.savefig("DIAL_OE_test_co2_v2.png", facecolor='w', edgecolor='w',
+plt.savefig("DIAL_OE_test_co2.png", facecolor='w', edgecolor='w',
             format="png", bbox_inches="tight", pad_inches=0.1)
 plt.close()
