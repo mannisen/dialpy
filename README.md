@@ -14,23 +14,23 @@ Finnish Meteorological Institute
 
 Written and tested with Python 3.6
 
-Package         Version
---------------- -------
-cftime          1.1.2
-cycler          0.10.0
-kiwisolver      1.2.0
-matplotlib      3.2.1
-netCDF4         1.5.3
-numpy           1.18.2
-pandas          1.0.3
-pip             19.0.3
-pyparsing       2.4.7
-python-dateutil 2.8.1
-pytz            2019.3
-scipy           1.4.1
-setuptools      46.1.3
-six             1.14.0
-xarray          0.15.1
+|Package|Version|
+|-------|-------|
+|cftime|1.1.2|
+|cycler|0.10.0|
+|kiwisolver|1.2.0|
+|matplotlib|3.2.1|
+|netCDF4|1.5.3|
+|numpy|1.18.2|
+|pandas|1.0.3|
+|pip|19.0.3|
+|pyparsing|2.4.7|
+|python-dateutil|2.8.1|
+|pytz|2019.3|
+|scipy|1.4.1|
+|setuptools|46.1.3|
+|six|1.14.0|
+|xarray|0.15.1|
 
 ### 1) Clone from github
 Open terminal and cd to the folder you want the code package be downloaded to
