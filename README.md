@@ -10,7 +10,7 @@ Finnish Meteorological Institute
 ----
 ## Minimal working example:
 
-### 0) pip install the required dependencies
+### 0) `pip3 install ...` the required dependencies
 
 Written and tested with Python 3.6
 
