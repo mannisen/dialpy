@@ -38,8 +38,8 @@ In the current working directory type:
 
   `python3 -m scripts.DIAL_xco2_retrieval`
 
-Simulated inputs are read, retrieval run, and results are written into a netcdf file in folder "", and results are
-plotted into the same folder into file "".
+Simulated inputs are read, retrieval run, and results are written into a netcdf file and plotted into
+*Dial_retrieval.nc* and *DIAL_OR_test_co2.png* files, respectively.
 
 ### 3) Run with your own inputs
 Open the */scripts/DIAL_xco2_retrieval.py* file and edit the lines 21-33.
