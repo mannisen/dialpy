@@ -59,5 +59,9 @@ file name on line 109. Also, the netcdf code requires the data to be given in st
 
 For manipulating time values e.g. to unix time */utilities/time_utils.py* has functions for that.
 
+In the current working directory type:
+
+  `python3 -m scripts.DIAL_xco2_retrieval`
+
 
 
