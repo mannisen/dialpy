@@ -6,7 +6,7 @@ Antti J Manninen
 Finnish Meteorological Institute
 
 ----
-###How to get started:
+### How to get started:
 1) Clone from github
 Open to terminal and cd to the folder you want the code package be downloaded to
 type:
