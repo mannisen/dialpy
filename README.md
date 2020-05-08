@@ -6,12 +6,14 @@ Antti J Manninen
 Finnish Meteorological Institute
 
 ----
-## Get started:
+How to get started:
 1) Clone from github
   - Open to terminal and cd to the folder you want the code package be downloaded to
   - type:
       `git clone https://github.com/dl-fmi/dialpy`
+
       `cd dialpy`
+
       `ls`
 
    - and you should see:
