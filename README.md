@@ -10,7 +10,9 @@ Finnish Meteorological Institute
 ----
 ## Minimal working example:
 
-### 0) Install the required dependencies
+### 0.1) create a virtual environment with pyenv
+
+### 0.2) Install the required dependencies
 
 Written and tested with Python 3.6
 
