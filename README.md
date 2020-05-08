@@ -10,15 +10,25 @@ How to get started:
 1) Clone from github
   - Open to terminal and cd to the folder you want the code package be downloaded to
   - type:
+
       `git clone https://github.com/dl-fmi/dialpy`
 
       `cd dialpy`
 
       `ls`
 
-   - and you should see:
-   `DIAL_OE_test_co2.png  DIAL_OE_test_co2_v2.png  dialpy  HITRAN_CO2_transition_data.par  __init__.py
-   oe_result.png  README.md  scripts  setup.py  total_internal_partition_sum.csv`
+      and you should see:
+
+      `DIAL_OE_test_co2.png
+      DIAL_OE_test_co2_v2.png
+      dialpy
+      HITRAN_CO2_transition_data.par
+      __init__.py
+      oe_result.png
+      README.md
+      scripts
+      setup.py
+      total_internal_partition_sum.csv`
 
 2) Run the retrieval
    - In the current working directory the DIAL retrieval code can be run by typing:
