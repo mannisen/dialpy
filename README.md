@@ -6,8 +6,9 @@ Antti J Manninen
 Finnish Meteorological Institute
 
 ----
-### How to get started:
-## 1) Clone from github
+## Minimal working example:
+
+### 1) Clone from github
 Open to terminal and cd to the folder you want the code package be downloaded to
 type:
 
@@ -30,7 +31,7 @@ and you should see:
   setup.py
   total_internal_partition_sum.csv`
 
-## 2) Run with simulated inputs
+### 2) Run with simulated inputs
 In the current working directory type:
 
   `python3 -m scripts.DIAL_xco2_retrieval`
@@ -38,7 +39,7 @@ In the current working directory type:
 Simulated inputs are read, retrieval run, and results are written into a netcdf file in folder "", and results are
 plotted into the same folder into file "".
 
-## 3) Run with your own inputs
+### 3) Run with your own inputs
 Open the */scripts/DIAL_xco2_retrieval.py* file and edit the lines 21-33.
 Here, you'd call your reader function to get inputs:
  - range
@@ -54,7 +55,7 @@ Here, you'd call your reader function to get inputs:
 Script */scripts/DIAL_xco2_retrieval.py* writes the netcdf file into the working directory. Change path and the desired
 file name on line 109. Also, the netcdf code requires the data to be given in str and in `YYYYmmdd` format.
 
-For converting time values to unix time */utilities/time_utils.py* has function for that.
+For manipulating time values e.g. to unix time */utilities/time_utils.py* has functions for that.
 
 
 
