@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f22e23b9-f530-415a-b193-b69591013d54" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dialpy/attributes/products.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/attributes/products.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dialpy/utilities/nc_tools.py" beforeDir="false" afterPath="$PROJECT_DIR$/dialpy/utilities/nc_tools.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scripts/DIAL_xco2_retrieval.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/DIAL_xco2_retrieval.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

@@ -8,8 +8,8 @@ Created on Thu Jun 13 13:48:23 2019
 
 from netCDF4 import Dataset
 from datetime import datetime
-from dopplerlidarpy.utilities import dl_toolbox_version
-from dopplerlidarpy.utilities import general_utils as gu
+from dialpy.utilities import dialpy_version
+from dialpy.utilities import general_utils as gu
 import getpass
 import uuid
 
@@ -122,7 +122,7 @@ def write_nc_(date_txt, file_name, obs, additional_gatts=None, title_="", instit
     rootgrp.year = int(date_txt[:4])
     rootgrp.month = int(date_txt[4:6])
     rootgrp.day = int(date_txt[6:8])
-    rootgrp.software_version = dl_toolbox_version.__version__
+    rootgrp.software_version = dialpy_version.__version__
 #    rootgrp.git_version = git_version()
     rootgrp.file_uuid = str(uuid.uuid4().hex)
     rootgrp.references = ''

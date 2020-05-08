@@ -107,25 +107,25 @@ PRODUCT_ATTRIBUTES = {
         "units": "m s-1",
         "comment": "See Eq. (10-11) in doi:10.5194/amt-8-2251-2015, and Eq. (7) in doi:10.5194/amt-10-1229-2017.",
         "dim_name": ("time", "range")},
-    "N_d_0": {
+    "number_density": {
         "standard_name": "number_density",
         "long_name": "initial number density",
         "units": "m-3",
         "comment": "initial value calculated with Eq. (3) in doi:10.1364/AO.52.002994",
         "dim_name": ("time", "range")},
-    "N_d_retrieved": {
+    "number_density_retrieved": {
         "standard_name": "number_density_retrieved",
         "long_name": "optimal number density",
         "units": "m-3",
         "comment": "optimal observation associated with retrieval solution",
         "dim_name": ("time", "range")},
-    "CO2_ppm": {
+    "carbon_dioxide_concentration": {
         "standard_name": "carbon_dioxide_concentration",
         "long_name": "retrieved CO2 concentration",
         "units": "ppm",
         "comment": "optimal estimation method retrieval solution, calculated with Eq. (7) in doi:10.1364/AO.52.002994",
         "dim_name": ("time", "range")},
-    "CO2_ppm_priori": {
+    "carbon_dioxide_concentration_priori": {
         "standard_name": "carbon_dioxide_concentration_priori",
         "long_name": "priori CO2 concentration",
         "units": "ppm",
