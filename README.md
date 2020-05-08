@@ -39,8 +39,8 @@ Simulated inputs are read, retrieval run, and results are written into a netcdf 
 plotted into the same folder into file "".
 
 3) Run with your own inputs
-Open the *DIAL_xco2_retrieval.py* file and edit the lines 21-33.
-Here, you'd call your reader function to get
+Open the */scripts/DIAL_xco2_retrieval.py* file and edit the lines 21-33.
+Here, you'd call your reader function to get inputs:
  - range
  - delta_sigma_abs
  - beta_att_on (or power_on)
