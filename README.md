@@ -11,7 +11,8 @@ Finnish Meteorological Institute
 ## Minimal working example:
 
 ### 1) Clone from github
-Open to terminal and cd to the folder you want the code package be downloaded to
+Open terminal and cd to the folder you want the code package be downloaded to
+
 type:
 
   `git clone https://github.com/dl-fmi/dialpy`
