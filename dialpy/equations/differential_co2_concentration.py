@@ -95,14 +95,15 @@ def xco2_beta(delta_sigma_abs, beta_att_on, beta_att_off, P_out_on=None, P_out_o
 
 
 def C_co2_ppm(N_d, T_, P_):
-    """
+    """See Eq. (7) in http://dx.doi.org/10.1364/AO.52.002994
 
     Args:
-        N_d:
-        T_:
-        P_:
+        N_d: (float) number density (# m-3)
+        T_: (float) temperature (K)
+        P_: (float) pressure (atm)
 
     Returns:
+        CO2_ppm: (float) carbon dioxide concentration (ppm)
 
     """
 
